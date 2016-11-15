@@ -1,1 +1,1 @@
-# store24
+# store24-case
