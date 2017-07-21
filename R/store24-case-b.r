@@ -53,24 +53,24 @@ library("readstata13")
 
 #PA_Store24B_data.data <-read_dta("data/PA_Store24B_data.dta")
 #load("data/PA_Store24B_data.dta")
-#PA_Store24B_data.data <- read.dta13("data/PA_Store24B_data.dta")
+#PA_Store24B_data <- read.dta13("data/PA_Store24B_data.dta")
 #save("PA_Store24B_data.data", file = "data/PA_Store24B_data.Rdata")
-save("PA_Store24B_data", file = "data/PA_Store24B_data.Rdata")
+#save("PA_Store24B_data", file = "data/PA_Store24B_data")
 
 
-# The following command reads the PA_Store24A_data data frame, previously saved to file in the 
+# The following command reads the PA_Store24B_data data frame, previously saved to file in the 
 # "store24-prep.r" script.
 
-load("data/PA_Store24B_data.RData")
+load("data/PA_Store24B_data.Rdata")
 
 # The following four commands list the variables, labels and dimensionality of the data frame,
 # the print the first 5 rows of the data frame.
 
-# The following command lists the contents of PA_Store24A_data.
+# The following command lists the contents of PA_Store24B_data.
 
 contents(PA_Store24B_data.Rdata)
 
-# The following command lists the first 5 rows of the PA_Store24A_data.
+# The following command lists the first 5 rows of the PA_Store24B_data.
 
 head(PA_Store24B_data.Rdata,n=5L)
 
@@ -161,7 +161,7 @@ ir2_mtenure
 # Re-running th emodel while dropping ctenure, then calculating the incremental difference in r-squared between that
 # model and the full model
 
-fit <- lm(profit ~ mtenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ mtenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24B_data_scaled)
 summary(fit)
 ir2_ctenure <- r2_full - summary(fit)$r.squared
 ir2_ctenure
@@ -172,7 +172,7 @@ ir2_ctenure
 # Re-running th emodel while dropping pop, then calculating the incremental difference in r-squared between that
 # model and the full model
 
-fit <- lm(profit ~ mtenure + ctenure + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ mtenure + ctenure + comp + visibility + pedcount + res + hours24, data = PA_Store24B_data_scaled)
 summary(fit)
 ir2_pop <- r2_full - summary(fit)$r.squared
 ir2_pop
@@ -183,7 +183,7 @@ ir2_pop
 # Re-running th emodel while dropping comp, then calculating the incremental difference in r-squared between that
 # model and the full model
 
-fit <- lm(profit ~ mtenure + ctenure + pop + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ mtenure + ctenure + pop + visibility + pedcount + res + hours24, data = PA_Store24B_data_scaled)
 summary(fit)
 ir2_comp <- r2_full - summary(fit)$r.squared
 ir2_comp
@@ -194,7 +194,7 @@ ir2_comp
 # Re-running th emodel while dropping visibility, then calculating the incremental difference in r-squared between that
 # model and the full model
 
-fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24B_data_scaled)
 summary(fit)
 ir2_visibility <- r2_full - summary(fit)$r.squared
 ir2_visibility
@@ -206,7 +206,7 @@ ir2_visibility
 # Re-running th emodel while dropping pedcount, then calculating the incremental difference in r-squared between that
 # model and the full model
 
-fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + res + hours24, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + res + hours24, data = PA_Store24B_data_scaled)
 summary(fit)
 ir2_pedcount <- r2_full - summary(fit)$r.squared
 ir2_pedcount
@@ -218,7 +218,7 @@ ir2_pedcount
 # Re-running th emodel while dropping res, then calculating the incremental difference in r-squared between that
 # model and the full model
 
-fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + hours24, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + hours24, data = PA_Store24B_data_scaled)
 summary(fit)
 ir2_res <- r2_full - summary(fit)$r.squared
 ir2_res
@@ -229,7 +229,7 @@ ir2_res
 # Re-running th emodel while dropping hours24, then calculating the incremental difference in r-squared between that
 # model and the full model
 
-fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res, data = PA_Store24B_data_scaled)
 summary(fit)
 ir2_hours24 <- r2_full - summary(fit)$r.squared
 ir2_hours24
@@ -321,21 +321,21 @@ pie3D(slices,labels=lbls,explode=0.1,
 
 #& // PART THREE: DIMINISHING RETURNS
 # // Create a new variable called MT2 that squares the manager tenure term
-# g MT2=mtenure*mtenure
+#g MT2=mtenure*mtenure
 
 # PART THREE: DIMINISHING RETURNS
 # Create a new variable called MT2 that squares the manager tenure term
 
-PA_Store24A_data$MT2 <- PA_Store24A_data$mtenure^2
-label(PA_Store24A_data$MT2) <- "Squared Manager Tenure"
-contents(PA_Store24A_data)
-head(PA_Store24A_data,n=5L)
+PA_Store24B_data$MT2 <- PA_Store24B_data$mtenure^2
+label(PA_Store24B_data$MT2) <- "Squared Manager Tenure"
+contents(PA_Store24B_data)
+head(PA_Store24B_data,n=5L)
 
 #& regress profit mtenure ctenure pop comp visibility ped res hours24 MT2
 
 # Running the regression while adding the MT2 variable as an explanantory variable:
 
-fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24 + MT2, data = PA_Store24A_data)
+fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24 + MT2, data = PA_Store24B_data)
 summary(fit)
 
 
@@ -344,7 +344,7 @@ summary(fit)
 
 # The following command saves this new version of the data frame as a new RData file
 
-#save(PA_Store24A_data, file = "data/PA_Store24A_data_new_variables.RData")
+#save(PA_Store24B_data, file = "data/PA_Store24B_data_new_variables.RData")
 
 
 # // Re-run the profit regression from Part A
@@ -359,7 +359,9 @@ summary(fit)
 #& // Part 4: Mediation
 #& // Note Parts 1-3 can be found in store24-case-a.do
 #& // Step 1: Show that the initial variable is correlated with the income
-#& regress profit mtenure ctenure pop comp visibility ped res hours24 MT2 mgrskill
+#&regress profit mtenure ctenure pop comp visibility ped res hours24 MT2 mgrskill
+fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24 + MT2 + mgrskill, data = PA_Store24B_data)
+summary(fit)
 #& // Step 2: Show that the initial variable is correlated with the mediator
 #& regress servqual mtenure ctenure pop comp visibility ped res hours24 MT2 mgrskill
 #& // Step 3: Show that the mediator affects the outcome variable, controlling for the initial variable.
