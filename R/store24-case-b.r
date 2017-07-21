@@ -16,8 +16,10 @@ rm(list = ls())
 #  but we can implement a logging function if needed.
 # To do so, remove the comments from the following line:
 
-filename <-paste0("./logs/store24-case-a_", Sys.Date(),".log")
-sink(filename)
+#sink(file = "./logs/store24-case-b", append = FALSE, type = c("output", "message"), split = TRUE)
+sink(file = paste0("./logs/store24-case-b_", Sys.Date(),".log"), append = FALSE, type = c("output", "message"), split = TRUE)
+#filename <-paste0("./logs/store24-case-b_", Sys.Date(),".log")
+#sink(filename)
 
 #& this makes it so you don't have to keep pressing return/enter to scroll through results
 #& set more off 
@@ -36,17 +38,25 @@ sink(filename)
 getwd()
 list.files()
 
-## install.packages("dplyr")
+#install.packages("dplyr")
 library(dplyr)
 
-## install.packages('Hmisc')
+#install.packages('Hmisc')
 library('Hmisc')
 
-## install.package("haven")
+#install.packages("haven")
 library(haven)
 
+#install.packages("readstata13")
+library("readstata13")
+
+
 #PA_Store24B_data.data <-read_dta("data/PA_Store24B_data.dta")
-#use "data/PA_Store24A_data.dta"
+#load("data/PA_Store24B_data.dta")
+#PA_Store24B_data.data <- read.dta13("data/PA_Store24B_data.dta")
+#save("PA_Store24B_data.data", file = "data/PA_Store24B_data.Rdata")
+save("PA_Store24B_data", file = "data/PA_Store24B_data.Rdata")
+
 
 # The following command reads the PA_Store24A_data data frame, previously saved to file in the 
 # "store24-prep.r" script.
@@ -58,11 +68,11 @@ load("data/PA_Store24B_data.RData")
 
 # The following command lists the contents of PA_Store24A_data.
 
-contents(PA_Store24B_data.data)
+contents(PA_Store24B_data.Rdata)
 
 # The following command lists the first 5 rows of the PA_Store24A_data.
 
-head(PA_Store24B_data,n=5L)
+head(PA_Store24B_data.Rdata,n=5L)
 
 ## install.packages("psych")
 library("psych")
@@ -72,7 +82,7 @@ library("psych")
 #&// Re-run the profit regression
 #&regress profit mtenure ctenure pop comp visibility ped res hours24
 #fit <- lm(profit ~ mtenure, data = PA_Store24B_data)
-fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24B_data)
+fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24B_data.Rdata)
 summary(fit)
 
 #&// Summarize the variable mtenure, then capture the standard deviation in a local (temporary) variable
@@ -109,12 +119,12 @@ all.vars(modelformula)
 # Note: the lapply() function referenced below will simply apply the scale() function to each variable in the 
 # model formula.
 
-PA_Store24A_data_scaled <- lapply(PA_Store24A_data[, all.vars(modelformula)], scale) 
-PA_Store24A_data
+PA_Store24B_data_scaled <- lapply(PA_Store24B_data.Rdata[, all.vars(modelformula)], scale) 
+PA_Store24B_data.Rdata
 
 # Now we can fit the LM() function to the scaled data 
 
-fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24B_data_scaled)
 summary(fit)
 
 
@@ -139,7 +149,7 @@ r2_full
 # Re-running th emodel while dropping mtenure, then calculating the incremental difference in r-squared between that
 # model and the full model
 
-fit <- lm(profit ~ ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24B_data_scaled)
 summary(fit)
 ir2_mtenure <- r2_full - summary(fit)$r.squared
 ir2_mtenure
