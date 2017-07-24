@@ -238,9 +238,13 @@ all.vars(modelformula)
 PA_Store24A_data_scaled <- lapply(PA_Store24A_data[, all.vars(modelformula)], scale) 
 PA_Store24A_data
 
+## install.packages("stargazer")
+library(stargazer)
+
+
 # Now we can fit the LM() function to the scaled data 
 
-fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data)
 summary(fit)
 
 #& //PART TWO: RELATIVE IMPORTANCE
@@ -253,7 +257,7 @@ summary(fit)
 
 # Using the results of our standardized regression baove, we can store the r-squared of the "full" proft model
 
-r2_full <- summary(fit)$r.squared
+r2_full <- summary(fit)$adj.r.squared
 r2_full
 
 #& // We will use it to calculate the incremental R2 of mtenure
@@ -263,9 +267,9 @@ r2_full
 # Re-running th emodel while dropping mtenure, then calculating the incremental difference in r-squared between that
 # model and the full model
 
-fit <- lm(profit ~ ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
+fit <- lm(profit ~ ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data)
 summary(fit)
-ir2_mtenure <- r2_full - summary(fit)$r.squared
+ir2_mtenure <- r2_full - summary(fit)$adj.r.squared
 ir2_mtenure
 
 #& // We continue to drop variables from the regression in turn, and calculate each incremental R2
@@ -277,7 +281,7 @@ ir2_mtenure
 
 fit <- lm(profit ~ mtenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
 summary(fit)
-ir2_ctenure <- r2_full - summary(fit)$r.squared
+ir2_ctenure <- r2_full - summary(fit)$adj.r.squared
 ir2_ctenure
 
 #& regress profit mtenure ctenure comp visibility ped res hours24
@@ -288,7 +292,7 @@ ir2_ctenure
 
 fit <- lm(profit ~ mtenure + ctenure + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
 summary(fit)
-ir2_pop <- r2_full - summary(fit)$r.squared
+ir2_pop <- r2_full - summary(fit)$adj.r.squared
 ir2_pop
 
 #& regress profit mtenure ctenure pop visibility ped res hours24
@@ -299,7 +303,7 @@ ir2_pop
 
 fit <- lm(profit ~ mtenure + ctenure + pop + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
 summary(fit)
-ir2_comp <- r2_full - summary(fit)$r.squared
+ir2_comp <- r2_full - summary(fit)$adj.r.squared
 ir2_comp
 
 #& regress profit mtenure ctenure pop comp ped res hours24
@@ -310,7 +314,7 @@ ir2_comp
 
 fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24, data = PA_Store24A_data_scaled)
 summary(fit)
-ir2_visibility <- r2_full - summary(fit)$r.squared
+ir2_visibility <- r2_full - summary(fit)$adj.r.squared
 ir2_visibility
 
 #& regress profit mtenure ctenure pop comp visibility res hours24
@@ -322,7 +326,7 @@ ir2_visibility
 
 fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + res + hours24, data = PA_Store24A_data_scaled)
 summary(fit)
-ir2_pedcount <- r2_full - summary(fit)$r.squared
+ir2_pedcount <- r2_full - summary(fit)$adj.r.squared
 ir2_pedcount
 
 #& regress profit mtenure ctenure pop comp visibility ped hours24
@@ -334,7 +338,7 @@ ir2_pedcount
 
 fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + hours24, data = PA_Store24A_data_scaled)
 summary(fit)
-ir2_res <- r2_full - summary(fit)$r.squared
+ir2_res <- r2_full - summary(fit)$adj.r.squared
 ir2_res
 
 #& regress profit mtenure ctenure pop comp visibility ped res
@@ -345,7 +349,7 @@ ir2_res
 
 fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res, data = PA_Store24A_data_scaled)
 summary(fit)
-ir2_hours24 <- r2_full - summary(fit)$r.squared
+ir2_hours24 <- r2_full - summary(fit)$adj.r.squared
 ir2_hours24
 
 
