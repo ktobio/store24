@@ -86,7 +86,7 @@ head(PA_Store24B_data,n=5L)
 
 # Running the regression while adding the MT2 and service quality variable as an explanantory variable:
 
-fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24 + MT2 + servqual, data = PA_Store24B_data)
+fit <- lm(profit ~ mtenure + ctenure + pop + comp + visibility + pedcount + res + hours24 + MT2, data = PA_Store24B_data)
 summary(fit)
 
 
@@ -127,7 +127,7 @@ summary(fit)
 #& // This requires the use of a new dataset, so we clear the current dataset from Stata's memory, then insheet the new dataset
 #& clear
 store24.small.data <- read.csv("data/store24-case-data-small-sample.csv")
-head(store24.small.data,n=5L)
+ 
 #& // Determine the relationship between store quality and profit
 #& regress profit quality
 fit <- lm(profit ~ quality, data = store24.small.data)
